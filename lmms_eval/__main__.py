@@ -381,7 +381,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         wandb_logger.run.finish()
 
 
-def cli_evaluate_single(args: Union[argparse.Namespace, None] = None) -> None:
+def cli_evaluate_single(args: Union[argparse.Namespace, None] = None) -> tuple[dict, dict]:
     selected_task_list = args.tasks.split(",") if args.tasks else None
 
     if args.include_path is not None:
