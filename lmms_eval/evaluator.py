@@ -51,7 +51,7 @@ from lmms_eval.utils import (
 
 @positional_deprecated
 def simple_evaluate(
-    model,
+    model: str,
     model_args: Optional[Union[str, dict]] = None,
     launcher_args: Optional[Union[str, dict]] = None,
     tasks: Optional[List[Union[str, dict, object]]] = None,
