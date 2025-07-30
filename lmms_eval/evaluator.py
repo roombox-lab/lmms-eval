@@ -21,6 +21,7 @@ from tqdm import tqdm
 import lmms_eval.api
 import lmms_eval.api.metrics
 import lmms_eval.api.registry
+from lmms_eval.api.task import Task
 from lmms_eval.evaluator_utils import (
     consolidate_group_results,
     consolidate_results,
