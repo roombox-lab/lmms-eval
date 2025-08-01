@@ -181,6 +181,8 @@ class Qwen2_5_VL(lmms):
         return new_list
 
     def generate_until(self, requests: List[Instance]) -> List[str]:
+        eval_logger.info(f"request count: {len(requests)}")
+        eval_logger.info(f"requsests: {requests}")
         res = []
 
         def _collate(x):
@@ -197,7 +199,7 @@ class Qwen2_5_VL(lmms):
         # we group requests by their generation_kwargs,
         # so that we don't try to execute e.g. greedy sampling and temp=0.8 sampling
         # in the same batch.
-        re_ords = utils.Collator([reg.args for reg in requests], _collate, grouping=True)
+        re_ords = utils.Collator([req.args for req in requests], _collate, grouping=True)
         chunks = re_ords.get_batched(n=self.batch_size, batch_fn=None)
         for chunk in chunks:
             contexts, all_gen_kwargs, doc_to_visual, doc_id, task, split = zip(*chunk)
