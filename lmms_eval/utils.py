@@ -909,7 +909,7 @@ class Collator:
             batch = self.get_chunks(values, n=n, fn=batch_fn)
             yield from batch
 
-    def _reorder(self, arr: Union[List, Tuple[Tuple[int, Any], ...]]) -> List:
+    def _reorder(self, arr: Union[List, Tuple[Tuple[int, Any], ...]]) -> Iterator[Any]:
         """
         Reorders the elements in the array based on the sorting function.
 
