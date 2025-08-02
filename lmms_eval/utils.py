@@ -897,10 +897,7 @@ class Collator:
         Iterator: An iterator over batches of reordered elements.
         """
         if self.grouping:
-            for (
-                key,
-                values,
-            ) in self.arr_with_indices.items():  # type: ignore
+            for values in self.arr_with_indices.values():  # type: ignore
                 values = self._reorder(values)
                 batch = self.get_chunks(values, n=n, fn=batch_fn)
                 yield from batch
