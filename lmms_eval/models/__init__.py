@@ -5,7 +5,6 @@ from typing import Literal
 from typing import Type
 
 from loguru import logger
-
 from lmms_eval.api.model import lmms
 
 # os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
@@ -83,7 +82,8 @@ AVAILABLE_SIMPLE_MODELS = {
 
 AVAILABLE_CHAT_TEMPLATE_MODELS = {"llava_hf": "LlavaHf", "qwen2_5_vl": "Qwen2_5_VL", "openai_compatible": "OpenAICompatible", "vllm": "VLLM", "sglang": "Sglang", "huggingface": "Huggingface", "async_openai": "AsyncOpenAIChat"}
 
-def get_model(model_name: str) -> Type[lmms]:
+
+def get_model(model_name, force_simple: bool = False) -> Type[lmms]:
     if model_name not in AVAILABLE_SIMPLE_MODELS and model_name not in AVAILABLE_CHAT_TEMPLATE_MODELS:
         raise ValueError(f"Model {model_name} not found in available models.")
 
