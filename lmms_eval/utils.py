@@ -975,7 +975,7 @@ class Collator:
         return res.values()
 
     @staticmethod
-    def get_chunks(_iter, n: int = 0, fn=None):
+    def get_chunks(_iter, n: int = 0, fn=None) -> Iterator[List[Any]]:
         """
         Divides an iterable into chunks of specified size or based on a given function.
         Useful for batching
