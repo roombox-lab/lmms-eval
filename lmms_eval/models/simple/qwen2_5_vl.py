@@ -202,7 +202,15 @@ class Qwen2_5_VL(lmms):
         re_ords = utils.Collator([req.args for req in requests], _collate, grouping=True)
         chunks = re_ords.get_batched(n=self.batch_size, batch_fn=None)
         for chunk in chunks:
+            print(f"chunk: {chunk}")
             contexts, all_gen_kwargs, doc_to_visual, doc_id, task, split = zip(*chunk)
+            print(f"contexts: {contexts}")
+            print(f"all_gen_kwargs: {all_gen_kwargs}")
+            print(f"doc_to_visual: {doc_to_visual}")
+            print(f"doc_id: {doc_id}")
+            print(f"task: {task}")
+            print(f"split: {split}")
+
             task = task[0]
             split = split[0]
             visual_list = [doc_to_visual[0](self.task_dict[task][split][ids]) for ids in doc_id]
