@@ -1,26 +1,19 @@
 import collections
-import inspect
 import itertools
 import json
 import os
 import random
-import sys
-import time
-from collections import defaultdict
-from dataclasses import dataclass
 from typing import Callable, List, Optional, Union
 
 import numpy as np
 import torch
 import torch.distributed as dist
 from accelerate import Accelerator
-from datasets import Image, Sequence
 from loguru import logger as eval_logger
 from tqdm import tqdm
 
 import lmms_eval.api
-import lmms_eval.api.metrics
-import lmms_eval.api.registry
+import lmms_eval.models
 from lmms_eval.api.task import Task
 from lmms_eval.api.model import lmms
 from lmms_eval.evaluator_utils import (
@@ -35,7 +28,6 @@ from lmms_eval.evaluator_utils import (
 )
 from lmms_eval.llm_judge.launcher import get_launcher
 from lmms_eval.loggers.evaluation_tracker import EvaluationTracker
-from lmms_eval.models import get_model
 from lmms_eval.tasks import TaskManager, get_task_dict
 from lmms_eval.utils import (
     create_iterator,
@@ -43,7 +35,6 @@ from lmms_eval.utils import (
     get_git_commit_hash,
     handle_non_serializable,
     hash_string,
-    make_table,
     positional_deprecated,
     run_task_tests,
     simple_parse_args_string,
@@ -55,7 +46,7 @@ def simple_evaluate(
     model: str,
     model_args: Optional[Union[str, dict]] = None,
     launcher_args: Optional[Union[str, dict]] = None,
-    tasks: Optional[List[Union[str, dict, object]]] = None,
+    tasks: List[str] = None,
     num_fewshot: Optional[int] = None,
     batch_size: Optional[Union[int, str]] = None,
     max_batch_size: Optional[int] = None,
@@ -93,8 +84,8 @@ def simple_evaluate(
     :param model_args: Optional[str, dict]
         String or dict arguments for each model class, see LM.create_from_arg_string and LM.create_from_arg_object.
         Ignored if `model` argument is a LM object.
-    :param tasks: list[Union[str, dict, Task]]
-        List of task names or Task objects. Task objects will be taken to have name task.EVAL_HARNESS_NAME if defined and type(task).__name__ otherwise.
+    :param tasks: List[str]
+        List of task names
     :param num_fewshot: int
         Number of examples in few-shot context
     :param batch_size: int or str, optional
